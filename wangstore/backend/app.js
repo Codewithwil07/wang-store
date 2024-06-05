@@ -4,15 +4,16 @@ import dotenv from 'dotenv';
 import express from 'express';
 import cookieParser from 'cookie-parser';
 
-
 // utils
 import connectDB from './config/db.js';
 import userRoutes from './routes/userRoues.js';
-
 dotenv.config();
 
-const port = process.env.PORT || 5000;
+const port = 5000;
 connectDB();
+
+// const uri = process.env.MONGO_URI
+console.log(process.env.PORT);
 
 const app = express();
 app.use(express.json());
