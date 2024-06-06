@@ -15,6 +15,5 @@ const generateToken = (res, userId) => {
   return token;
 };
 
-console.log(process.env.PORT);
 
 export default generateToken;
