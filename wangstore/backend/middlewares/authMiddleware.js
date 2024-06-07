@@ -18,7 +18,7 @@ const authenticate = asyncHandler(async (req, res, next) => {
     }
   } else {
     res.status(401);
-    throw new Error('Not , gaada');
+    throw new Error('Not authorized, ga ada!🤔');
   }
 });
 
@@ -35,4 +35,18 @@ const getAllUsers = asyncHandler(async (req, res) => {
   res.json(user);
 });
 
-export { authenticate, authorizeAdmin, getAllUsers };
+const getCurrentUserProfile = asyncHandler(async (req, res) => {
+  const user = await User.findById(req.user._id);
+  if (user) {
+    res.json({
+      _id: user._id,
+      username: user.username,
+      email: user.email,
+    });
+  } else {
+    res.status(404);
+    throw new Error(`User not found`);
+  }
+});
+
+export { authenticate, authorizeAdmin, getAllUsers, getCurrentUserProfile };
