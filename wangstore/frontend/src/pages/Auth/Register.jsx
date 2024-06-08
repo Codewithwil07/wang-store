@@ -149,7 +149,7 @@ const Register = () => {
         alt=""
         className="h-[65rem] w-[59%] xl:block md:hidden sm:hidden rounded-lg"
       />
-    </section>
+    </section>  
   );
 };
 

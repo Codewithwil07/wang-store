@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { useState } from 'react';
 import {
   AiOutlineHome,
@@ -53,7 +54,7 @@ const Navigation = () => {
           to='/'
           className='flex items-center transition-transform transform hover:translate-x-2'
         >
-          <AiOutlineHome className=' mt-[3rem]' size={26} />
+          <AiOutlineHome className='mr-1 mt-[3rem]' size={26} />
           <span className='hidden nav-item-name mt-[3rem]'>HOME</span>{' '}
         </Link>
 
@@ -61,7 +62,7 @@ const Navigation = () => {
           to='/shop'
           className='flex items-center transition-transform transform hover:translate-x-2'
         >
-          <AiOutlineShopping className=' mt-[3rem]' size={26} />
+          <AiOutlineShopping className='mr-1 mt-[3rem]' size={26} />
           <span className='hidden nav-item-name mt-[3rem]'>SHOP</span>{' '}
         </Link>
 
@@ -69,12 +70,15 @@ const Navigation = () => {
           to='/cart'
           className='flex items-center transition-transform transform hover:translate-x-2'
         >
-          <AiOutlineShoppingCart className='mt-[3rem]' size={26} />
+          <AiOutlineShoppingCart className='mr-1 mt-[3rem]' size={26} />
           <span className='hidden nav-item-name mt-[3rem]'>Cart</span>{' '}
         </Link>
 
-        <Link to='/favorite' className='flex  items-center transition-transform transform hover:translate-x-2'>
-          <FaHeart className='mt-[3rem] ' size={20} />
+        <Link
+          to='/favorite'
+          className='flex  items-center transition-transform transform hover:translate-x-2'
+        >
+          <FaHeart className='mt-[3rem] mr-1' size={20} />
           <span className='hidden nav-item-name mt-[3rem]'>Favorites</span>{' '}
         </Link>
       </div>

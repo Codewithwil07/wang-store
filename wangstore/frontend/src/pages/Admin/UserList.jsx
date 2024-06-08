@@ -8,7 +8,7 @@ import {
   useUpdateUserMutation,
 } from '../../redux/api/usersApiSlice';
 import { toast } from 'react-toastify';
-// ⚠️⚠️⚠️ don't forget this ⚠️⚠️⚠️⚠️
+
 // import AdminMenu from "./AdminMenu";
 
 const UserList = () => {
@@ -59,7 +59,7 @@ const UserList = () => {
 
   return (
     <div className='p-4'>
-      <h1 className='text-2xl font-semibold mb-4'>Users</h1>
+      <h1 className='text-2xl font-semibold mb-4 ml-10'>Users</h1>
       {isLoading ? (
         <Loader />
       ) : error ? (
