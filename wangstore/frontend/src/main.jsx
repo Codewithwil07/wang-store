@@ -7,19 +7,16 @@ import { createBrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import store from './redux/store';
 
-
-
 import PrivateRoute from './components/privateRoute.jsx';
-
 
 // Auth
 import Login from './pages/Auth/Login.jsx';
 import Register from './pages/Auth/Register.jsx';
 
-import AdminRoute from "./pages/Admin/AdminRoute";
+import AdminRoute from './pages/Admin/AdminRoute';
 import Profile from './pages/User/Profile.jsx';
-import UserList from './pages/Admin/UserList.jsx'
-
+import UserList from './pages/Admin/UserList.jsx';
+import CategoryList from './pages/Admin/CategoryList.jsx';
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -30,12 +27,11 @@ const router = createBrowserRouter(
       <Route path='' element={<PrivateRoute />}>
         <Route path='/profile' element={<Profile />} />
       </Route>
-     
+
       <Route path='/admin' element={<AdminRoute />}>
         <Route path='userlist' element={<UserList />} />
+        <Route path='categorylist' element={<CategoryList />} />
       </Route>
-
-
     </Route>
   )
 );
