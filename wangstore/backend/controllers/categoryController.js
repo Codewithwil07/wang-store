@@ -16,11 +16,41 @@ const createCategory = asyncHandler(async (req, res) => {
     }
 
     const category = await new Category({ name }).save();
-    res.json(category)
+    res.json(category);
   } catch (error) {
-    console.log(error);
     return res.status(400).json(error);
   }
 });
 
-export { createCategory };
+const updateCategory = asyncHandler(async (req, res) => {
+  try {
+    const { name } = req.body;
+    const { categoryId } = req.params;
+
+    const category = await Category.findOne({ _id: categoryId });
+
+    if (!category) return res.status(404).json({ error: 'Category not found' });
+
+    category.name = name;
+
+    const updateCategory = await category.save();
+    res.json(updateCategory);
+  } catch (error) {
+    console.error(error);
+    return res.status(400).json('Interval server error');
+  }
+});
+
+const removeCategory = asyncHandler(async (req, res) => {
+  try {
+    const { categoryId } = req.params;
+    const remove = await Category.findByIdAndDelete({
+      _id: categoryId,
+    });
+    res.json(remove);
+  } catch (error) {}
+  console.error(error);
+  return res.status(400).json('INternal server error');
+});
+
+export { createCategory, updateCategory, removeCategory };
