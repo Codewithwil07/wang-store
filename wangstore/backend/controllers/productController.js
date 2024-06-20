@@ -57,4 +57,36 @@ const updateProduct = asyncHandler(async (req, res) => {
   }
 });
 
-export { addProduct, updateProduct };
+const removeProduct = asyncHandler(async (req, res) => {
+  try {
+    const product = await Product.findByIdAndDelete(req.params.id);
+    res.json(product);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Server error' });
+  }
+});
+
+const fecthProducts = asyncHandler(async (req, res) => {
+  try {
+    const pageSize = 6;
+    const keyword = req.query.keyword
+      ? { name: { $regex: req.query.keyword, $opptions: 'i' } }
+      : {};
+
+    const count = await Product.countDocuments({ ...keyword });
+    const products = await Product.find({ ...keyword }).limit(pageSize);
+
+    res.json({
+      products,
+      page: 1,
+      pages: Math.ceil(count / pageSize),
+      hasMore: false,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Server error' });
+  }
+});
+
+export { addProduct, updateProduct, removeProduct, fecthProducts };
