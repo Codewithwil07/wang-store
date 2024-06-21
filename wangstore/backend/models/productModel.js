@@ -6,7 +6,7 @@ const reviewSchema = mongoose.Schema(
   {
     name: { type: String, required: true },
     rating: { type: Number, required: true },
-    Comment: { type: String, required: true },
+    comment: { type: String, required: true },
     user: {
       type: mongoose.Schema.Types.ObjectId,
       required: true,
@@ -24,11 +24,11 @@ const productSchema = mongoose.Schema(
     quantity: { type: Number, required: true },
     category: { type: ObjectId, ref: 'Category', required: true },
     description: { type: String, required: true },
-    reviews: { reviewSchema },
+    reviews: [reviewSchema],
     rating: { type: Number, required: true, default: 0 },
     numReviews: { type: Number, required: true, default: 0 },
     price: { type: Number, required: true, default: 0 },
-    countImStock: { type: Number, required: true, default: 0 },
+    countInStock: { type: Number, required: true, default: 0 },
   },
   { timestamps: true }
 );

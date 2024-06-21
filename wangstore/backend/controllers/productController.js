@@ -119,11 +119,55 @@ const fetchAllProducts = asyncHandler(async (req, res) => {
   }
 });
 
+const addProductReview = asyncHandler(async (req, res) => {
+  try {
+    const { rating, comment } = req.body;
+    let product = await Product.findById(req.params.id);
+
+    if (product) {
+      let alreadyReviewed = product.reviews.find(
+        (r) => r.user.toString() === req.user._id.toString()
+      );
+
+      if (alreadyReviewed) {
+        res.status(400);
+        throw new Error('Product already reviewed');
+      }
+
+      const review = {
+        name: req.user.username,
+        rating: Number(rating),
+        comment,
+        user: req.user._id,
+      };
+
+      product.reviews.push(review);
+
+      product.numReviews = product.reviews.length;
+
+      product.rating =
+        product.reviews.reduce((acc, item) => item.rating + acc, 0) /
+        product.reviews.length;
+
+      await product.save();
+      res.status(201).send({ message: 'Review added' });
+    } else {
+      res.status(404);
+      throw new Error('Product not found');
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(404).json(error.message || error);
+  }
+});
+
+
 export {
   addProduct,
   updateProduct,
   removeProduct,
   fecthProducts,
   fetchProductById,
-  fetchAllProducts
+  fetchAllProducts,
+  addProductReview,
 };
