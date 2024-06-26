@@ -1,5 +1,5 @@
-import { PRODUCT_URL, UPLOAD_URL } from '../constants.js';
-import { apiSlice } from './apiSlice.js';
+import { PRODUCT_URL, UPLOAD_URL } from '../constants';
+import { apiSlice } from './apiSlice';
 
 export const productApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
@@ -9,7 +9,7 @@ export const productApiSlice = apiSlice.injectEndpoints({
         params: { keyword },
       }),
       keepUnusedDataFor: 5,
-      providesTags: ['Product'],
+      providesTags: ['Products'],
     }),
 
     getProductById: builder.query({
@@ -20,7 +20,7 @@ export const productApiSlice = apiSlice.injectEndpoints({
     }),
 
     allProducts: builder.query({
-      query: () => `${PRODUCT_URL}/allproducts`,
+      query: () => `${PRODUCT_URL}/allProducts`,
     }),
 
     getProductDetails: builder.query({
@@ -32,7 +32,7 @@ export const productApiSlice = apiSlice.injectEndpoints({
 
     createProduct: builder.mutation({
       query: (productData) => ({
-        url: `${PRODUCT_URL}/${productData}`,
+        url: `${PRODUCT_URL}`,
         method: 'POST',
         body: productData,
       }),
@@ -40,10 +40,10 @@ export const productApiSlice = apiSlice.injectEndpoints({
     }),
 
     updateProduct: builder.mutation({
-      query: ({ productId, formdata }) => ({
-        url: `${PRODUCT_URL}/${productId} `,
-        methodt: 'PUT',
-        body: formdata,
+      query: ({ productId, formData }) => ({
+        url: `${PRODUCT_URL}/${productId}`,
+        method: 'PUT',
+        body: formData,
       }),
     }),
 
@@ -72,13 +72,21 @@ export const productApiSlice = apiSlice.injectEndpoints({
     }),
 
     getTopProducts: builder.query({
-      query: () => `  ${PRODUCT_URL}/top`,
+      query: () => `${PRODUCT_URL}/top`,
       keepUnusedDataFor: 5,
     }),
 
     getNewProducts: builder.query({
-      query: () => ` ${PRODUCT_URL}/new`,
+      query: () => `${PRODUCT_URL}/new`,
       keepUnusedDataFor: 5,
+    }),
+
+    getFilteredProducts: builder.query({
+      query: ({ checked, radio }) => ({
+        url: `${PRODUCT_URL}/filtered-products`,
+        method: 'POST',
+        body: { checked, radio },
+      }),
     }),
   }),
 });
@@ -95,4 +103,5 @@ export const {
   useGetTopProductsQuery,
   useGetNewProductsQuery,
   useUploadProductImageMutation,
+  useGetFilteredProductsQuery,
 } = productApiSlice;
