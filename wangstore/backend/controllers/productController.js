@@ -1,21 +1,24 @@
-import asyncHandler from '../middlewares/asyncHandler.js';
-import Product from '../models/productModel.js';
+import asyncHandler from "../middlewares/asyncHandler.js";
+import Product from "../models/productModel.js";
 
 const addProduct = asyncHandler(async (req, res) => {
   try {
     const { name, description, price, category, quantity, brand } = req.fields;
+
+    // Validation
     switch (true) {
       case !name:
-        return res.json({ error: 'Name is required' });
-      case !description:
-        return res.json({ error: 'Description is required' });
-      case !price:
-        return res.json({ error: 'Price is required' });
-      case !category:
-        return res.json({ error: 'Category is required' });
-      case !quantity:
-        return res.json({ error: 'Quantity is required' });
+        return res.json({ error: "Name is required" });
       case !brand:
+        return res.json({ error: "Brand is required" });
+      case !description:
+        return res.json({ error: "Description is required" });
+      case !price:
+        return res.json({ error: "Price is required" });
+      case !category:
+        return res.json({ error: "Category is required" });
+      case !quantity:
+        return res.json({ error: "Quantity is required" });
     }
 
     const product = new Product({ ...req.fields });
@@ -23,25 +26,28 @@ const addProduct = asyncHandler(async (req, res) => {
     res.json(product);
   } catch (error) {
     console.error(error);
-    res.status(404).json(error.message);
+    res.status(400).json(error.message);
   }
 });
 
-const updateProduct = asyncHandler(async (req, res) => {
+const updateProductDetails = asyncHandler(async (req, res) => {
   try {
     const { name, description, price, category, quantity, brand } = req.fields;
+
+    // Validation
     switch (true) {
       case !name:
-        return res.json({ error: 'Name is required' });
-      case !description:
-        return res.json({ error: 'Description is required' });
-      case !price:
-        return res.json({ error: 'Price is required' });
-      case !category:
-        return res.json({ error: 'Category is required' });
-      case !quantity:
-        return res.json({ error: 'Quantity is required' });
+        return res.json({ error: "Name is required" });
       case !brand:
+        return res.json({ error: "Brand is required" });
+      case !description:
+        return res.json({ error: "Description is required" });
+      case !price:
+        return res.json({ error: "Price is required" });
+      case !category:
+        return res.json({ error: "Category is required" });
+      case !quantity:
+        return res.json({ error: "Quantity is required" });
     }
 
     const product = await Product.findByIdAndUpdate(
@@ -49,11 +55,13 @@ const updateProduct = asyncHandler(async (req, res) => {
       { ...req.fields },
       { new: true }
     );
+
     await product.save();
+
     res.json(product);
   } catch (error) {
     console.error(error);
-    res.status(404).json(error.message);
+    res.status(400).json(error.message);
   }
 });
 
@@ -63,15 +71,21 @@ const removeProduct = asyncHandler(async (req, res) => {
     res.json(product);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: 'Server error' });
+    res.status(500).json({ error: "Server error" });
   }
 });
 
-const fecthProducts = asyncHandler(async (req, res) => {
+const fetchProducts = asyncHandler(async (req, res) => {
   try {
     const pageSize = 6;
+
     const keyword = req.query.keyword
-      ? { name: { $regex: req.query.keyword, $opptions: 'i' } }
+      ? {
+          name: {
+            $regex: req.query.keyword,
+            $options: "i",
+          },
+        }
       : {};
 
     const count = await Product.countDocuments({ ...keyword });
@@ -85,53 +99,52 @@ const fecthProducts = asyncHandler(async (req, res) => {
     });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: 'Server error' });
+    res.status(500).json({ error: "Server Error" });
   }
 });
 
 const fetchProductById = asyncHandler(async (req, res) => {
   try {
     const product = await Product.findById(req.params.id);
-
     if (product) {
       return res.json(product);
     } else {
       res.status(404);
-      throw new Error('Product not found');
+      throw new Error("Product not found");
     }
   } catch (error) {
     console.error(error);
-    res.status(404).json({ error: 'Product not found' });
+    res.status(404).json({ error: "Product not found" });
   }
 });
 
 const fetchAllProducts = asyncHandler(async (req, res) => {
   try {
     const products = await Product.find({})
-      .populate('category')
+      .populate("category")
       .limit(12)
       .sort({ createAt: -1 });
 
     res.json(products);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: 'Server error' });
+    res.status(500).json({ error: "Server Error" });
   }
 });
 
 const addProductReview = asyncHandler(async (req, res) => {
   try {
     const { rating, comment } = req.body;
-    let product = await Product.findById(req.params.id);
+    const product = await Product.findById(req.params.id);
 
     if (product) {
-      let alreadyReviewed = product.reviews.find(
+      const alreadyReviewed = product.reviews.find(
         (r) => r.user.toString() === req.user._id.toString()
       );
 
       if (alreadyReviewed) {
         res.status(400);
-        throw new Error('Product already reviewed');
+        throw new Error("Product already reviewed");
       }
 
       const review = {
@@ -150,14 +163,14 @@ const addProductReview = asyncHandler(async (req, res) => {
         product.reviews.length;
 
       await product.save();
-      res.status(201).send({ message: 'Review added' });
+      res.status(201).json({ message: "Review added" });
     } else {
       res.status(404);
-      throw new Error('Product not found');
+      throw new Error("Product not found");
     }
   } catch (error) {
     console.error(error);
-    res.status(404).json(error.message || error);
+    res.status(400).json(error.message);
   }
 });
 
@@ -167,7 +180,7 @@ const fetchTopProducts = asyncHandler(async (req, res) => {
     res.json(products);
   } catch (error) {
     console.error(error);
-    res.status(404).json(error.message);
+    res.status(400).json(error.message);
   }
 });
 
@@ -177,18 +190,35 @@ const fetchNewProducts = asyncHandler(async (req, res) => {
     res.json(products);
   } catch (error) {
     console.error(error);
-    res.status(404).json(error.message);
+    res.status(400).json(error.message);
+  }
+});
+
+const filterProducts = asyncHandler(async (req, res) => {
+  try {
+    const { checked, radio } = req.body;
+
+    let args = {};
+    if (checked.length > 0) args.category = checked;
+    if (radio.length) args.price = { $gte: radio[0], $lte: radio[1] };
+
+    const products = await Product.find(args);
+    res.json(products);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Server Error" });
   }
 });
 
 export {
   addProduct,
-  updateProduct,
+  updateProductDetails,
   removeProduct,
-  fecthProducts,
+  fetchProducts,
   fetchProductById,
   fetchAllProducts,
   addProductReview,
   fetchTopProducts,
   fetchNewProducts,
+  filterProducts,
 };
